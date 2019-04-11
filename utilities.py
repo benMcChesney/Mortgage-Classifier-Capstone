@@ -27,3 +27,26 @@ def remove_cols_with_perc_missing_values(df, min_ratio):
             print("'", column, "' removed.")
     #return df_filtered
     
+    
+def minMax_normalize_df_col(df, col_key):
+    # normalize a single column
+    c = df[col_key]
+    df[col_key] = (c - c.min())/(c.max()-c.min())
+    
+def mean_normalize_df_col(df, col_key):
+    # normalize a single column
+    c = df[col_key]
+    df[col_key] = (c - c.mean())/c.std()
+    
+    
+# see if there's any significant difference ( +- 5% of 50% ) per category
+def category_compare_to_classification_label(df, label_key, max_fields=10):
+    for col in df.columns:
+        # not helpful if there are too many unique columns
+        num_unique = df[col].nunique()
+        if num_unique < max_fields:
+            print(pd.crosstab( df[col], df[label_key], normalize='index'))
+        else:
+            print(col , ' column has too many unique fields (',num_unique ,')')
+        print('------')
+              
